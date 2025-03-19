@@ -50,18 +50,30 @@ jobs:
           minikube kubectl -- apply -f hello-world-node.yaml
           minikube kubectl -- apply -f hello-world-node-service.yaml
 
+      - name: Attendre que le pod démarre
+        run: |
+          echo "Attente de la création du pod..."
+          while [[ -z $(minikube kubectl -- get pods -o=jsonpath='{.items[0].metadata.name}') ]]; do
+            echo "En attente du pod..."
+            sleep 5
+          done
+          echo "Pod trouvé !"
+          
+      - name: Attendre que le pod soit en état Running
+        run: |
+          echo "Vérification du démarrage du pod..."
+          while [[ $(minikube kubectl -- get pods -o=jsonpath='{.items[0].status.phase}') != "Running" ]]; do
+            echo "Pod en cours de création... (5s)"
+            sleep 5
+          done
+          echo "Pod démarré avec succès !"
+
       - name: Vérifier le déploiement
         run: |
-          docker images
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
           minikube ip
-          minikube kubectl -- get deployments
-          minikube kubectl -- describe deployment hello-world-node
-          minikube kubectl -- describe deployment hello-world-node
-          minikube kubectl -- get pods -A
-          minikube kubectl -- logs -l app=hello-world-node
-
+          
 
       - name: Installer et lancer ngrok
         run: |
