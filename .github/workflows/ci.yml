@@ -20,8 +20,11 @@ jobs:
         mkdir -p ~/.ssh
         echo "${{ secrets.SSH_PRIVATE_KEY }}" > ~/.ssh/id_rsa
         chmod 600 ~/.ssh/id_rsa
-        # Ajout manuel de la clé de l'hôte à known_hosts
-        ssh-keyscan -H <localhost> | tee -a ~/.ssh/known_hosts
+        # Ajouter la clé hôte à known_hosts
+        ssh-keyscan -H <localhost> > temp_known_hosts
+        cat temp_known_hosts >> ~/.ssh/known_hosts
+        rm temp_known_hosts
+
 
     # 3. Vérifier la connexion SSH
     - name: Vérifier la connexion SSH
