@@ -35,13 +35,11 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-      - uses: azure/setup-kubectl@v3
+      - name: Setup Minikube
+        uses: manusa/actions-setup-minikube@v2.4.0
         with:
-          version: 'latest'
+          minikube version: 'latest'
       - name: Déployer sur Kubernetes
         run: |
-          kubectl apply -f hello-world-node.yaml --validate=false
-          kubectl apply -f hello-world-node-service.yaml
-          kubectl set image deployment/hello-world-node hello-world-node=ryrii/hello-world-node:latest
-        env:
-          KUBECONFIG: ${{ secrets.KUBECONFIG }}
+          minikube kubectl -- apply -f hello-world-node.yaml
+          minikube kubectl -- apply -f hello-world-node-service.yaml
