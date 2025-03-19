@@ -31,18 +31,26 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-20.04
+    runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
-      - name: Afficher les informations sur le système d'exploitation
-        run: uname -a
-      - name: Setup Minikube
-        uses: manusa/actions-setup-minikube@v2.4.0
-        with:
-          minikube version: 'latest'
-          kubernetes version: 'latest'
-      - name: Déployer sur Kubernetes
+      - name: Checkout du code source
+        uses: actions/checkout@v4
+
+      - name: Installer Minikube et kubectl
         run: |
-          minikube kubectl -- apply -f hello-world-node.yaml
-          minikube kubectl -- apply -f hello-world-node-service.yaml
+          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x kubectl
+          sudo mv kubectl /usr/local/bin/
+          minikube start --driver=docker
+
+      - name: Déployer sur Kubernetes avec Minikube
+        run: |
+          eval $(minikube docker-env)
+          minikube kubectl -- apply -f deployment.yml
+          minikube kubectl -- apply -f service.yml
+
+      - name: Vérifier le déploiement
+        run: |
+          minikube kubectl -- get pods
+          minikube kubectl -- get service hello-world-node-service
