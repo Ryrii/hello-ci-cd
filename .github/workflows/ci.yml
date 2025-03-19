@@ -47,8 +47,8 @@ jobs:
       - name: Déployer sur Kubernetes avec Minikube
         run: |
           eval $(minikube docker-env)
-          minikube kubectl -- apply -f deployment.yml
-          minikube kubectl -- apply -f service.yml
+          minikube kubectl -- apply -f hello-world-node.yaml
+          minikube kubectl -- apply -f hello-world-node-service.yaml
 
       - name: Vérifier le déploiement
         run: |
