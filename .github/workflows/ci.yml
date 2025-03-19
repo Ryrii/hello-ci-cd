@@ -54,3 +54,5 @@ jobs:
         run: |
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
+          minikube ip
+
