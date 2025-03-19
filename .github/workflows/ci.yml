@@ -52,9 +52,16 @@ jobs:
 
       - name: Vérifier le déploiement
         run: |
+          docker images
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
           minikube ip
+          minikube kubectl -- get deployments
+          minikube kubectl -- describe deployment hello-world-node
+          minikube kubectl -- describe deployment hello-world-node
+          minikube kubectl -- get pods -A
+          minikube kubectl -- logs -l app=hello-world-node
+
 
       - name: Installer et lancer ngrok
         run: |
