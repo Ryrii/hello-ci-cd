@@ -40,8 +40,8 @@ jobs:
           version: 'latest'
       - name: Déployer sur Kubernetes
         run: |
-          kubectl apply -f deployment.yml
-          kubectl apply -f service.yml
+          kubectl apply -f hello-world-node.yaml
+          kubectl apply -f hello-world-node-service.yaml
           kubectl set image deployment/hello-world-node hello-world-node=yourusername/hello-world-node:latest
         env:
           KUBECONFIG: ${{ secrets.KUBECONFIG }}
