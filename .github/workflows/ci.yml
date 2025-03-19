@@ -31,10 +31,12 @@ jobs:
 
   deploy:
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
 
     steps:
       - uses: actions/checkout@v4
+      - name: Afficher les informations sur le système d'exploitation
+        run: uname -a
       - name: Setup Minikube
         uses: manusa/actions-setup-minikube@v2.4.0
         with:
