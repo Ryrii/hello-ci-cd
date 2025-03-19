@@ -41,6 +41,7 @@ jobs:
         uses: manusa/actions-setup-minikube@v2.4.0
         with:
           minikube version: 'latest'
+          kubernetes version: 'latest'
       - name: Déployer sur Kubernetes
         run: |
           minikube kubectl -- apply -f hello-world-node.yaml
