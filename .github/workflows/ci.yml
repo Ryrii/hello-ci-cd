@@ -55,4 +55,4 @@ jobs:
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
           minikube ip
-
+          curl http://192.168.49.2:31889/
