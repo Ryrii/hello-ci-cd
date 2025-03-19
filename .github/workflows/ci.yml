@@ -55,7 +55,6 @@ jobs:
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
           minikube ip
-          minikube service hello-world-node-service --url
 
       - name: Installer et lancer ngrok
         run: |
