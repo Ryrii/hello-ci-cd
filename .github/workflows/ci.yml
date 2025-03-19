@@ -58,7 +58,7 @@ jobs:
             sleep 5
           done
           echo "Pod trouvé !"
-          
+
       - name: Attendre que le pod soit en état Running
         run: |
           echo "Vérification du démarrage du pod..."
@@ -73,13 +73,30 @@ jobs:
           minikube kubectl -- get pods
           minikube kubectl -- get service hello-world-node-service
           minikube ip
-          
 
       - name: Installer et lancer ngrok
         run: |
           curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
           echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
-          sudo apt update && sudo apt install ngrok
+          sudo apt update && sudo apt install -y ngrok
+  
+          # Lancer ngrok pour exposer le service Minikube
+          echo "Démarrage de ngrok..."
           nohup ngrok http $(minikube service hello-world-node-service --url | awk -F/ '{print $3}') > /dev/null 2>&1 &
+  
+          # Attendre quelques secondes que ngrok soit prêt
+          sleep 30
+  
+          # Afficher l'URL fournie par ngrok
+          echo "URL ngrok :"
+          curl --silent http://localhost:4040/api/tunnels | jq '.tunnels[0].public_url'
 
+          sleep 30
+
+
+
+      - name: Nettoyer les ressources Kubernetes
+        run: |
+          minikube kubectl -- delete deployment hello-world-node
+          minikube kubectl -- delete service hello-world-node-service
 
