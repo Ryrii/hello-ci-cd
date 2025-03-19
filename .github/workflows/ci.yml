@@ -28,3 +28,20 @@ jobs:
         run: |
           docker tag ryrii/hello-world-node:${{ github.sha }} ryrii/hello-world-node:latest
           docker push ryrii/hello-world-node:latest
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: azure/setup-kubectl@v3
+        with:
+          version: 'latest'
+      - name: Déployer sur Kubernetes
+        run: |
+          kubectl apply -f deployment.yml
+          kubectl apply -f service.yml
+          kubectl set image deployment/hello-world-node hello-world-node=yourusername/hello-world-node:latest
+        env:
+          KUBECONFIG: ${{ secrets.KUBECONFIG }}
