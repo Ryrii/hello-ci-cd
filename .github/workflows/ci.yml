@@ -19,4 +19,4 @@ jobs:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
       
       - name: Test SSH connection
-        run: ssh -o StrictHostKeyChecking=no user@hostname 'echo "SSH connection successful!"'
+        run: ssh -o StrictHostKeyChecking=no cytech@student-laptop 'echo "SSH connection successful!"'
