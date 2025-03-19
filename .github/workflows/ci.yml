@@ -22,6 +22,6 @@ jobs:
 
     - name: Pousser l'image Docker
       run: |
-        docker tag yourusername/hello-world-node:${{ github.sha }} yourusername/hello-world-node:latest
-        docker push yourusername/hello-world-node:latest
+        docker tag ryrii/hello-world-node:${{ github.sha }} yourusername/hello-world-node:latest
+        docker push ryrii/hello-world-node:latest
 
